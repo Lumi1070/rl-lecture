@@ -1,5 +1,6 @@
 import math
 
+
 class Agent:
     def __init__(self, env):
         self.env = env
@@ -35,9 +36,9 @@ class Episode:
             total_reward += t.reward
         return total_reward
 
-    def to_string(self):
+    def __str__(self):
         out = '-'.join(str(t.new_state) for t in self.transitions)
-        return "0-" + out + " # Reward:" + str(self.total_reward())
+        return f"0-{out} # Reward: {self.total_reward()}"
 
 #    def calc_return_at(self, transition_index, gamma):
 #        total_return = 0
