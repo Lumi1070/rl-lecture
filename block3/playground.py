@@ -1,8 +1,8 @@
 from block1.agent import Agent
 from block1.random_policy import RandomPolicy
-from block2.policy_iteration import policy_iteration
-from block3.monte_carlo import policy_iteration_mc
-from block3.td_zero import policy_iteration_td_zero
+from block2.policy_iteration import eval_state_values
+from block3.monte_carlo import every_visit_mc
+from block3.td_zero import td_zero
 
 import gym
 
@@ -10,42 +10,35 @@ ENV_NAME = "FrozenLake-v0"
 GAMMA = 1
 env = gym.make(ENV_NAME)
 agent = Agent(env)
+print("## Frozen Lake ##")
+env.render()
 
-no_episodes = 1000
-
-print("\n")
-print(f"## Random Policy - {no_episodes} episodes ##")
 random_policy = RandomPolicy(env)
-total_reward = 0.0
-for i in range(0, no_episodes):
-    episode = agent.play_episode(random_policy)
-    total_reward += episode.total_reward()
-print("Total reward: " + str(total_reward))
 
 print("\n")
-print("## Policy Iteration ##")
-best_policy = policy_iteration(env)
-total_reward = 0.0
-for i in range(0, 1000):
-    episode = agent.play_episode(best_policy)
-    total_reward += episode.total_reward()
-print("Total reward: " + str(total_reward))
+print("## Policy Evaluation on MDP##")
+state_values = eval_state_values(env, random_policy)
+print(f"State values:")
+print([f'{x:.3f}' for x in state_values[0:4]])
+print([f'{x:.3f}' for x in state_values[4:8]])
+print([f'{x:.3f}' for x in state_values[8:12]])
+print([f'{x:.3f}' for x in state_values[12:16]])
+
+print("\n")
+print("## Policy Evaluation with mc-evaluation ##")
+state_values = every_visit_mc(env, agent, random_policy, 1000)
+print(f"State values:")
+print([f'{x:.3f}' for x in state_values[0:4]])
+print([f'{x:.3f}' for x in state_values[4:8]])
+print([f'{x:.3f}' for x in state_values[8:12]])
+print([f'{x:.3f}' for x in state_values[12:16]])
 
 
 print("\n")
-print("## Policy Iteration with mc-evaluation ##")
-best_policy = policy_iteration_mc(env, agent)
-total_reward = 0.0
-for i in range(0, 1000):
-    episode = agent.play_episode(best_policy)
-    total_reward += episode.total_reward()
-print("Total reward: " + str(total_reward))
-
-print("\n")
-print("## Policy Iteration with td-zero ##")
-best_policy = policy_iteration_td_zero(env, agent)
-total_reward = 0.0
-for i in range(0, 1000):
-    episode = agent.play_episode(best_policy)
-    total_reward += episode.total_reward()
-print("Total reward: " + str(total_reward))
+print("## Policy Evaluation with temporal differencing ##")
+state_values = every_visit_mc(env, agent, random_policy, 1000)
+print(f"State values:")
+print([f'{x:.3f}' for x in state_values[0:4]])
+print([f'{x:.3f}' for x in state_values[4:8]])
+print([f'{x:.3f}' for x in state_values[8:12]])
+print([f'{x:.3f}' for x in state_values[12:16]])
